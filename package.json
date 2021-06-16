@@ -1,5 +1,6 @@
 {
   "name": "create-component",
+  "publisher": "cmnx",
   "displayName": "Create Component",
   "description": "快速生成React/Vue组件",
   "version": "0.0.1",
