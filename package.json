@@ -2,7 +2,16 @@
   "name": "create-component",
   "publisher": "cmnx",
   "displayName": "Create Component",
-  "description": "快速生成React/Vue组件",
+  "description": "create react/vue component quickly",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/981377660LMT/vscode-plugin/tree/master"
+  },
+  "bugs": {
+    "url": "https://github.com/981377660LMT/vscode-plugin/issues",
+    "email": "lmt2818088@gmail.com"
+  },
+  "icon": "images/icon.png",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.57.0"
@@ -75,6 +84,7 @@
     "eslint": "^7.27.0",
     "glob": "^7.1.7",
     "mocha": "^8.4.0",
+    "react": "^17.0.2",
     "ts-loader": "^9.2.2",
     "typescript": "^4.3.2",
     "vscode-test": "^1.5.2",
@@ -83,7 +93,6 @@
   },
   "dependencies": {
     "ejs": "^3.1.6",
-    "fs-extra": "^10.0.0",
-    "react": "^17.0.2"
+    "fs-extra": "^10.0.0"
   }
 }
