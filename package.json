@@ -11,11 +11,18 @@
     "url": "https://github.com/981377660LMT/vscode-plugin/issues",
     "email": "lmt2818088@gmail.com"
   },
-  "icon": "images/icon.png",
+  "icon": "icon.png",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.57.0"
   },
+  "keywords": [
+    "template",
+    "snippets",
+    "react",
+    "vue",
+    "component"
+  ],
   "categories": [
     "Other",
     "Snippets"
