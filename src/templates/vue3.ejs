@@ -1,0 +1,30 @@
+<template>
+  <div>{{ readersNumber }} {{ book.title }}</div>
+</template>
+
+<script lang="ts">
+import { defineComponent, ref, reactive, onMounted } from 'vue'
+
+export default defineComponent({
+  name: '<%= componentName %>',
+  components: {},
+  props: {},
+  setup(props, { attrs, slots, emit }) {
+    const readersNumber = ref(0)
+    const book = reactive({ title: 'Vue 3 Guide' })
+
+    onMounted(() => {
+      console.log('Component is mounted!')
+    })
+
+    return {
+      readersNumber,
+      book,
+    }
+  },
+})
+</script>
+
+<style lang="scss" scoped>
+
+</style>
