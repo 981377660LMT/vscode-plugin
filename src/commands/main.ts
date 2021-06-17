@@ -6,9 +6,19 @@ import { Parser } from '../utils/parser'
 // 在webview中打开
 const dataToInterface = vscode.commands.registerCommand('ts-interface-mock.dataToInterface', uri =>
   Collector.getSelectedText()
-    .then(Parser.parse)
-    .then(parsedData => new Displayer(parsedData).displayToFile())
-    .catch(vscode.window.showErrorMessage)
+    .then(text => {
+      console.log(text, 1111)
+      return Parser.parse(text)
+    })
+    .then(parsedData => {
+      console.log(parsedData, 222)
+      const displayer = new Displayer(parsedData)
+      displayer.displayToFile()
+    })
+    .catch(err => {
+      console.log(err, 3333)
+      vscode.window.showErrorMessage(err.message)
+    })
 )
 
 // 在webview中打开

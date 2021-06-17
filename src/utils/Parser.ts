@@ -1,4 +1,5 @@
 import JsonToTS from 'json-to-ts'
+import * as humps from 'humps'
 
 // 策略模式
 class Parser {
@@ -10,11 +11,12 @@ class Parser {
     }
   }
 
+  // todo，贪婪匹配最外面的{}里的内容；eval需要安全
   private static async parseJson(json: string) {
     const tryEval = (str: any) => eval(`const a = ${str}; a`)
 
     try {
-      return JSON.parse(json)
+      return humps.camelizeKeys(JSON.parse(json))
     } catch (ignored) {}
 
     try {

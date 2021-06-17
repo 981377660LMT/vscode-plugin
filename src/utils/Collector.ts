@@ -1,3 +1,4 @@
+import * as fs from 'fs'
 import { window } from 'vscode'
 import * as copyPaste from 'copy-paste'
 
@@ -7,13 +8,15 @@ class Collector {
     return document.getText(selection).trim()
   }
 
-  public static async getClipboardText(): Promise<string> {
-    try {
-      return copyPaste.paste().trim()
-    } catch (error) {
-      console.log(error)
-      return Promise.reject(error)
-    }
+  public static async getClipboardText() {
+    return copyPaste.paste().trim()
+  }
+
+  public static getSelectedFile() {
+    const { document } = window.activeTextEditor!
+    return document.fileName.endsWith('json')
+      ? fs.readFileSync(document.fileName, 'utf8').toString()
+      : ''
   }
 }
 
