@@ -28,12 +28,18 @@ class Displayer {
   }
 
   private static getViewColumn() {
-    const activeEditor = window.activeTextEditor
-    return activeEditor ? ViewColumn.One : ViewColumn.Beside
+    const activeEditor = window.activeTextEditor!
+    switch (activeEditor.viewColumn) {
+      case ViewColumn.One:
+        return ViewColumn.Two
+      case ViewColumn.Two:
+        return ViewColumn.Three
+      default:
+        return ViewColumn.Beside
+    }
   }
 
   private async showViewColumn() {
-    console.log(this, 333)
     return commands.executeCommand('vscode.open', this.tmpFileUri, Displayer.getViewColumn())
   }
 
