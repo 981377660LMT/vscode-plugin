@@ -76,6 +76,7 @@
     "intermock": "^0.2.5",
     "json-to-ts": "^1.7.0",
     "parse-json": "^5.2.0",
+    "ts-morph": "^11.0.0",
     "typescript-parser": "^2.6.1"
   }
 }

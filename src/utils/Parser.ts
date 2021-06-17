@@ -15,21 +15,18 @@ class Parser {
     }
   }
 
-  // todo，贪婪匹配最外面的{}里的内容
   private static async parseJson(json: string): Promise<{}> {
     const tryEval = (str: any) => eval(`const a = ${str}; a`)
 
-    // 一般的json字符串
     try {
       return JSON.parse(json)
     } catch (ignored) {}
 
-    // js对象字符串
     try {
       return tryEval(json)
     } catch (ignored) {}
 
-    // 正则提取最外层的{}
+    // extract {}
     try {
       const matchedObj = json.match(/\{([\s\S]+)\}/gm)
       return tryEval(matchedObj)

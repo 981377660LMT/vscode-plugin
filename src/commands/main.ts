@@ -3,8 +3,7 @@ import { Collector } from '../utils/Collector'
 import { Displayer } from '../utils/Displayer'
 import { Parser } from '../utils/parser'
 
-// 在webview中打开
-const dataToInterface = vscode.commands.registerCommand('ts-interface-mock.dataToInterface', uri =>
+const dataToInterface = vscode.commands.registerCommand('ts-interface-mock.dataToInterface', () =>
   Collector.getSelectedText()
     .then(text => {
       console.log(text, 1111)
@@ -21,12 +20,15 @@ const dataToInterface = vscode.commands.registerCommand('ts-interface-mock.dataT
     })
 )
 
-// 在webview中打开
-const interfaceToData = vscode.commands.registerCommand(
-  'ts-interface-mock.interfaceToData',
-  uri => {
-    console.log(uri)
-  }
-)
+const interfaceToData = vscode.commands.registerCommand('ts-interface-mock.interfaceToData', () => {
+  Collector.getSelectedText()
+    .then(text => {
+      console.log(text, 1111)
+    })
+    .catch(err => {
+      console.log(err, 3333)
+      vscode.window.showErrorMessage(err.message)
+    })
+})
 
 export { interfaceToData, dataToInterface }

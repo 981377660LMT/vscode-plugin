@@ -10,6 +10,7 @@ class Displayer {
   private data: string
   private tmpFilePath: string
   private tmpFileUri: Uri
+
   constructor(data: string, tmpFilePath: string = defaultTmpFilePath) {
     this.data = data
     this.tmpFilePath = tmpFilePath
