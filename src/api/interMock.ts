@@ -1,6 +1,8 @@
-import { mock } from 'intermock'
 import * as fs from 'fs'
+
+import { mock } from 'intermock'
 import { join } from 'path'
+
 const filePath = join(__dirname, 'interface.ts')
 const data = mock({
   output: 'json',

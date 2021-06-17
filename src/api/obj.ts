@@ -9,6 +9,3 @@ const obj = {
   cow: new Map(),
   horse: { foo: 1 },
 }
-
-// true
-console.log('assa'.endsWith(''))
