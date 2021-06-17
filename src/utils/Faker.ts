@@ -1,0 +1,3 @@
+class Faker {}
+
+export { Faker }
