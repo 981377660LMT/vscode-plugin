@@ -1,13 +1,14 @@
-import * as humps from 'humps'
 import JsonToTS from 'json-to-ts'
+import * as humps from 'humps'
 
+// 策略模式
 class Parser {
   constructor(private data: string) {
-    this.validateLength()
+    this.validateLength(data)
   }
 
   public async parse(): Promise<string> {
-    const parsedData = this.parseData().data as unknown as object
+    const parsedData = this.parseData(this.data)
     return Parser.toTS(Parser.camelize(parsedData))
   }
 
@@ -19,34 +20,31 @@ class Parser {
     return JsonToTS(input).reduce((a, b) => `${a}\n\n${b}`)
   }
 
-  private validateLength() {
-    if (this.data.length === 0) {
+  private validateLength(data: string) {
+    if (data.length === 0) {
       throw new Error('Nothing selected')
     }
-
-    return this
+    return this.data
   }
 
-  private parseData() {
+  private parseData(json: string) {
     const tryEval = (str: any) => eval(`const a = ${str}; a`)
 
     try {
-      this.data = JSON.parse(this.data)
+      return JSON.parse(json)
     } catch (ignored) {}
 
     try {
-      this.data = tryEval(this.data)
+      return tryEval(json)
     } catch (ignored) {}
 
     // extract {}
     try {
-      const matchedObj = this.data.match(/\{([\s\S]+)\}/gm)
-      this.data = tryEval(matchedObj)
+      const matchedObj = json.match(/\{([\s\S]+)\}/gm)
+      return tryEval(matchedObj)
     } catch (error) {
       throw new Error('fail to parse...')
     }
-
-    return this
   }
 }
 
