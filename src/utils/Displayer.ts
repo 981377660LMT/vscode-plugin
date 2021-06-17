@@ -28,6 +28,14 @@ class Displayer {
     })
   }
 
+  public static formatDocument() {
+    commands.executeCommand('editor.action.formatDocument')
+  }
+
+  public static showError(err: Error) {
+    window.showErrorMessage(err.message)
+  }
+
   private static getViewColumn() {
     const activeEditor = window.activeTextEditor!
     switch (activeEditor.viewColumn) {
@@ -41,11 +49,11 @@ class Displayer {
   }
 
   private async showViewColumn() {
-    return commands.executeCommand('vscode.open', this.tmpFileUri, Displayer.getViewColumn())
+    commands.executeCommand('vscode.open', this.tmpFileUri, Displayer.getViewColumn())
   }
 
   private async writeDataToFile(data: string) {
-    return fs.writeFileSync(this.tmpFilePath, data)
+    fs.writeFileSync(this.tmpFilePath, data)
   }
 }
 

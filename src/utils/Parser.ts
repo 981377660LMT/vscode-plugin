@@ -1,46 +1,52 @@
-import JsonToTS from 'json-to-ts'
 import * as humps from 'humps'
+import JsonToTS from 'json-to-ts'
 
-// 策略模式
 class Parser {
-  public static async parse(text: string): Promise<string> {
-    return this.validateLength(text).then(this.parseJson).then(this.camelize).then(this.toTS)
+  constructor(private data: string) {
+    this.validateLength()
   }
 
-  private static async validateLength(text: string) {
-    if (text.length === 0) {
-      return Promise.reject(new Error('Nothing selected'))
-    } else {
-      return text
+  public async parse(): Promise<string> {
+    const parsedData = this.parseData().data as unknown as object
+    return Parser.toTS(Parser.camelize(parsedData))
+  }
+
+  public static camelize(obj: {} | Array<{}>) {
+    return humps.camelizeKeys(obj)
+  }
+
+  public static toTS(input: {} | Array<{}>) {
+    return JsonToTS(input).reduce((a, b) => `${a}\n\n${b}`)
+  }
+
+  private validateLength() {
+    if (this.data.length === 0) {
+      throw new Error('Nothing selected')
     }
+
+    return this
   }
 
-  private static async parseJson(json: string): Promise<{}> {
+  private parseData() {
     const tryEval = (str: any) => eval(`const a = ${str}; a`)
 
     try {
-      return JSON.parse(json)
+      this.data = JSON.parse(this.data)
     } catch (ignored) {}
 
     try {
-      return tryEval(json)
+      this.data = tryEval(this.data)
     } catch (ignored) {}
 
     // extract {}
     try {
-      const matchedObj = json.match(/\{([\s\S]+)\}/gm)
-      return tryEval(matchedObj)
+      const matchedObj = this.data.match(/\{([\s\S]+)\}/gm)
+      this.data = tryEval(matchedObj)
     } catch (error) {
       throw new Error('fail to parse...')
     }
-  }
 
-  private static async camelize(obj: {} | Array<{}>) {
-    return humps.camelizeKeys(obj)
-  }
-
-  private static async toTS(input: {} | Array<{}>) {
-    return JsonToTS(input).reduce((a, b) => `${a}\n\n${b}`)
+    return this
   }
 }
 

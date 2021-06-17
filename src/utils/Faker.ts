@@ -1,12 +1,15 @@
 import { readFileSync } from 'fs'
 
 import { mock } from 'intermock'
+
 import { Collector } from './Collector'
 
 class Faker {
-  public static async fake(inter: string): Promise<string> {
+  constructor(private inter: string) {}
+
+  public async fake(): Promise<string> {
     const { fileName } = Collector.getSelectedFile()
-    const interfaces = this.extractInterName(inter)
+    const interfaces = this.extractInterName()
     const option = {
       output: 'json',
       files: [[fileName, readFileSync(fileName, 'utf-8')]],
@@ -21,9 +24,9 @@ class Faker {
     return mockData as string
   }
 
-  private static extractInterName(data: string): Array<string> {
-    const regexp = /^interface\s+([\S]+?)\b/gm
-    const iterator = data.matchAll(regexp)
+  private extractInterName(): Array<string> {
+    const regExp = /^interface\s+([\S]+?)\b/gm
+    const iterator = this.inter.matchAll(regExp)
 
     return [...iterator].map(arr => arr[1])
   }
