@@ -12,11 +12,15 @@ class Collector {
     return copyPaste.paste().trim()
   }
 
-  public static getSelectedFile() {
+  public static getSelectedFile(extName?: string) {
     const { document } = window.activeTextEditor!
-    return document.fileName.endsWith('json')
-      ? fs.readFileSync(document.fileName, 'utf8').toString()
-      : ''
+
+    return document.fileName.endsWith(extName || '')
+      ? {
+          data: fs.readFileSync(document.fileName, 'utf8').toString().trim(),
+          fileName: document.fileName,
+        }
+      : { data: '', fileName: document.fileName }
   }
 }
 
