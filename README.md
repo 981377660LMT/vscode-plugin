@@ -8,17 +8,17 @@
 ### Data to Interface
 
 - #### json to interface
-  ![json to interface](src/images/json.gif)
+  ![json to interface](https://github.com/981377660LMT/vscode-plugin/blob/ts-interface-mock/src/images/json.gif?raw=true)
 - #### object to interface
-  ![object to interface](src/images/obj.gif)
+  ![object to interface](https://github.com/981377660LMT/vscode-plugin/blob/ts-interface-mock/src/images/obj.gif?raw=true)
 - #### class to interface
-  ![class to interface](src/images/class.gif)
+  ![class to interface](https://github.com/981377660LMT/vscode-plugin/blob/ts-interface-mock/src/images/class.gif?raw=true)
 
 ### Interface to Data
 
 - #### interface to mock data
 
-  ![interface to mock data](src/images/inter.gif)
+  ![interface to mock data](https://github.com/981377660LMT/vscode-plugin/blob/ts-interface-mock/src/images/inter.gif?raw=true)
 
   #### Type Support
 
