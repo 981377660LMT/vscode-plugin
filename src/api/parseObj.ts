@@ -3,7 +3,18 @@ const a = `const o = {
   foo:{}
 sd}`
 
-// [\s\S]匹配任意字符包括换行符
-const foo = a.match(/\{([\s\S]+)\}/gm)
+const demo = `
+dasdasdasfs
+'class Clock 
+{  public ncurrentTime: Date;  
+  constructor(h: number, m: number) 
+  { }}'
+class B{}
+`
 
-console.log(foo, foo![0])
+// [\s\S]匹配任意字符包括换行符
+// const foo = a.match(/\{([\s\S]+)\}/gm)
+// console.log(foo, foo![0])
+
+const bar = demo.match(/class([\s\S]+)}/gm)
+console.log(bar, bar![0])

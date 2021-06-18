@@ -1,0 +1,7 @@
+{
+  name: 'IDisplayer',
+  value: 'interface IDisplayer {\n' +
+    '  displayToFile(): void;\n' +
+    '  displayToTextEditor(): void;\n' +
+    '}\n'
+}

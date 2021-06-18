@@ -1,18 +1,19 @@
 import JsonToTS from 'json-to-ts'
 import * as humps from 'humps'
 
-// 策略模式
+import { parseClass } from '../lib/parseClass'
+
 class Parser {
   constructor(private data: string) {
     this.validateLength(data)
   }
 
   public async parse(): Promise<string> {
-    const parsedData = this.parseData(this.data)
-    return Parser.toTS(Parser.camelize(parsedData))
+    const parsedData = await this.parseData(this.data)
+    return typeof parsedData === 'string' ? parsedData : Parser.toTS(Parser.camelize(parsedData))
   }
 
-  public static camelize(obj: {} | Array<{}>) {
+  public static camelize(obj: object | Array<object>) {
     return humps.camelizeKeys(obj)
   }
 
@@ -27,8 +28,8 @@ class Parser {
     return this.data
   }
 
-  private parseData(json: string) {
-    const tryEval = (str: any) => eval(`const a = ${str}; a`)
+  private async parseData(json: string): Promise<string | object> {
+    const tryEval = (str: string) => eval(`const a = ${str}; a`)
 
     try {
       return JSON.parse(json)
@@ -40,8 +41,15 @@ class Parser {
 
     // extract {}
     try {
-      const matchedObj = json.match(/\{([\s\S]+)\}/gm)
+      const matchedObj = json.match(/\{([\s\S]+)\}/gm)![0]
       return tryEval(matchedObj)
+    } catch (ignored) {}
+
+    // parse as class
+    try {
+      const matchedClass = json.match(/class([\s\S]+)}/gm)![0]
+      const parsedClass = await parseClass(matchedClass)
+      return parsedClass
     } catch (error) {
       throw new Error('fail to parse...')
     }
