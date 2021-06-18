@@ -1,3 +1,4 @@
+import { logger } from './../api/logger'
 import { readFileSync } from 'fs'
 
 import { mock } from 'intermock'
@@ -20,6 +21,7 @@ class Faker {
     }
 
     const mockData = mock(option)
+    logger().log(mockData)
 
     return mockData as string
   }

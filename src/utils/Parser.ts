@@ -31,15 +31,12 @@ class Parser {
   private async parseData(json: string): Promise<string | object> {
     const tryEval = (str: string) => eval(`const a = ${str}; a`)
 
+    // parse as json
     try {
       return JSON.parse(json)
     } catch (ignored) {}
 
-    try {
-      return tryEval(json)
-    } catch (ignored) {}
-
-    // extract {}
+    // parse as object
     try {
       const matchedObj = json.match(/\{([\s\S]+)\}/gm)![0]
       return tryEval(matchedObj)
