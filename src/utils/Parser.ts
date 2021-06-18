@@ -1,5 +1,5 @@
-import JsonToTS from 'json-to-ts'
 import * as humps from 'humps'
+import JsonToTS from 'json-to-ts'
 
 import { parseClass } from '../lib/parseClass'
 
@@ -17,7 +17,7 @@ class Parser {
     return humps.camelizeKeys(obj)
   }
 
-  public static toTS(input: {} | Array<{}>) {
+  public static toTS(input: object | Array<object>) {
     return JsonToTS(input).reduce((a, b) => `${a}\n\n${b}`)
   }
 
