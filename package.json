@@ -18,11 +18,11 @@
     "commands": [
       {
         "command": "ts-interface-mock.dataToInterface",
-        "title": "Data to Interface"
+        "title": "TS Mock - Data to Interface"
       },
       {
         "command": "ts-interface-mock.interfaceToData",
-        "title": "Interface to Data"
+        "title": "TS Mock - Interface to Data"
       }
     ],
     "menus": {
@@ -74,7 +74,6 @@
     "humps": "^2.0.1",
     "intermock": "^0.2.5",
     "json-to-ts": "^1.7.0",
-    "ts-morph": "^11.0.0",
     "typescript-parser": "^2.6.1"
   }
 }
