@@ -1,39 +1,58 @@
 {
-  "name": "ts-interface-mock",
-  "displayName": "ts-interface-mock",
-  "description": "",
+  "name": "ts-mock",
+  "publisher": "caomeinaixi",
+  "displayName": "TS Mock",
+  "description": "Generate mock data from interface and Generate interface from json/object/class.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/981377660LMT/vscode-plugin/tree/ts-interface-mock"
+  },
+  "bugs": {
+    "url": "https://github.com/981377660LMT/vscode-plugin/issues",
+    "email": "lmt2818088@gmail.com"
+  },
+  "icon": "icon.png",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.57.0"
   },
+  "keywords": [
+    "typescript",
+    "ts",
+    "mock",
+    "interface",
+    "json",
+    "util",
+    "types"
+  ],
   "categories": [
     "Other"
   ],
   "activationEvents": [
-    "onCommand:ts-interface-mock.dataToInterface",
-    "onCommand:ts-interface-mock.interfaceToData"
+    "onCommand:ts-mock.dataToInterface",
+    "onCommand:ts-mock.interfaceToData"
   ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "ts-interface-mock.dataToInterface",
+        "command": "ts-mock.dataToInterface",
         "title": "TS Mock - Data to Interface"
       },
       {
-        "command": "ts-interface-mock.interfaceToData",
+        "command": "ts-mock.interfaceToData",
         "title": "TS Mock - Interface to Data"
       }
     ],
     "menus": {
       "editor/context": [
         {
-          "command": "ts-interface-mock.dataToInterface",
+          "command": "ts-mock.dataToInterface",
           "when": "editorFocus",
           "group": "9_cutcopypaste"
         },
         {
-          "command": "ts-interface-mock.interfaceToData",
+          "command": "ts-mock.interfaceToData",
           "when": "resourceLangId == typescript || resourceLangId == typescriptreact",
           "group": "9_cutcopypaste"
         }

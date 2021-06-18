@@ -8,14 +8,14 @@ import { Displayer } from '../utils/Displayer'
 import { Faker } from '../utils/Faker'
 import { Parser } from '../utils/parser'
 
-const dataToInterface = vscode.commands.registerCommand('ts-interface-mock.dataToInterface', () =>
+const dataToInterface = vscode.commands.registerCommand('ts-mock.dataToInterface', () =>
   Collector.getSelectedText()
     .then(data => new Parser(data).parse())
     .then(parsedInter => new Displayer(parsedInter, join(tmpdir(), 'result.ts')).displayToFile())
     .catch(Displayer.showError)
 )
 
-const interfaceToData = vscode.commands.registerCommand('ts-interface-mock.interfaceToData', () => {
+const interfaceToData = vscode.commands.registerCommand('ts-mock.interfaceToData', () => {
   Collector.getSelectedText()
     .then(inter => new Faker(inter).fake())
     .then(fakeData => new Displayer(fakeData, join(tmpdir(), 'result.json')).displayToFile())

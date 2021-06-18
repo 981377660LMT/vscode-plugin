@@ -1,4 +1,3 @@
-import { logger } from './../api/logger'
 import { readFileSync } from 'fs'
 
 import { mock } from 'intermock'
@@ -21,15 +20,12 @@ class Faker {
     }
 
     const mockData = mock(option)
-    logger().log(mockData)
-
     return mockData as string
   }
 
   private extractInterName(): Array<string> {
     const regExp = /^interface\s+([\S]+?)\b/gm
     const iterator = this.inter.matchAll(regExp)
-
     return [...iterator].map(arr => arr[1])
   }
 }
