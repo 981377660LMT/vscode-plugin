@@ -23,16 +23,20 @@ const createTemplate = (command: Command) =>
             if (input === undefined) {
               return
             }
-            if (!invalidFileNames.test(input)) {
-              return new TemplateCreator({
-                uri,
-                componentName: getPascalCase(input),
-                fileName: getPascalCase(input) + `.${command.extName}`,
-                templateType: command.templateType,
-              }).createTemplate()
-            } else {
-              return window.showErrorMessage('Invalid component name')
-            }
+
+            const inputArr = input.split(/\s+/).filter(s => s)
+            inputArr.forEach(componentName => {
+              if (!invalidFileNames.test(componentName)) {
+                return new TemplateCreator({
+                  uri,
+                  componentName: getPascalCase(componentName),
+                  fileName: getPascalCase(componentName) + `.${command.extName}`,
+                  templateType: command.templateType,
+                }).createTemplate()
+              } else {
+                return window.showErrorMessage(`Invalid component name ${componentName}`)
+              }
+            })
           })
   )
 

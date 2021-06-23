@@ -4,6 +4,10 @@ create React/Vue component quickly
 
 ![demo](./src/images/demo.gif)
 
+create multiple components (separated by spaces)
+
+![multi](./src/images/multi.gif)
+
 ## Menu Options
 
 | Command                  |
