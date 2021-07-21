@@ -6,7 +6,7 @@ import * as vscode from 'vscode'
 import { Collector } from '../utils/Collector'
 import { Displayer } from '../utils/Displayer'
 import { Faker } from '../utils/Faker'
-import { Parser } from '../utils/parser'
+import { Parser } from '../utils/Parser'
 
 const dataToInterface = vscode.commands.registerCommand('ts-mock.dataToInterface', () =>
   Collector.getSelectedText()

@@ -22,28 +22,7 @@
 
   #### Type Support
 
-  The following TypeScript features are supported:
-
-  - Interfaces
-  - Interfaces with properties of primitive types
-  - Interfaces with property references to other complex types
-  - Interfaces with extensions
-  - Unions
-  - Type aliases
-  - Arrays
-  - Namespaces
-  - Tuples
-  - Mapped types
-  - Generics
-  - Functions (stringified output!)
-  - Optional properties
-  - Specific [Faker](https://github.com/marak/Faker.js/#api-methods) data types (via JSDoc comment)
-    ```ts
-    interface Host {
-      /** @mockType {internet.ipv6} */
-      addr: string
-    }
-    ```
+  Please check this library [google/intermock](https://github.com/google/intermock)
 
 ## Menu Options
 
