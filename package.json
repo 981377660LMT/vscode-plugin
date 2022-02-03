@@ -11,14 +11,21 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:funny-editor.helloWorld"
+    "onCommand:funny-editor.helloWorld",
+    "onCommand:funny-editor.doRefactor"
   ],
-  "main": "./dist/extension.js",
+  "main": "./extension-dist/extension.js",
   "contributes": {
     "commands": [
       {
         "command": "funny-editor.helloWorld",
-        "title": "Hello World"
+        "title": "Hello World",
+        "category": "Funny Editor"
+      },
+      {
+        "command": "funny-editor.doRefactor",
+        "title": "Do some refactoring",
+        "category": "Funny Editor"
       }
     ]
   },
