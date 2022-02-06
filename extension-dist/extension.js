@@ -1,7 +1,50 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ([
-/* 0 */,
+/* 0 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.deactivate = exports.activate = void 0;
+const vscode = __importStar(__webpack_require__(1));
+const ReactPanel_1 = __webpack_require__(2);
+function activate(context) {
+    console.log('Congratulations, your extension "funny-editor" is now active!');
+    context.subscriptions.push(vscode.commands.registerCommand('funny-editor.helloWorld', () => {
+        ReactPanel_1.ReactPanel.createOrShowInstance(context.extensionUri);
+    }));
+    context.subscriptions.push(vscode.commands.registerCommand('funny-editor.doRefactor', () => {
+        if (ReactPanel_1.ReactPanel.currentPanel) {
+            ReactPanel_1.ReactPanel.currentPanel.dispose();
+        }
+    }));
+}
+exports.activate = activate;
+function deactivate() { }
+exports.deactivate = deactivate;
+
+
+/***/ }),
 /* 1 */
 /***/ ((module) => {
 
@@ -12,6 +55,25 @@ module.exports = require("vscode");
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -23,7 +85,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ReactPanel = void 0;
-const vscode = __webpack_require__(1);
+const vscode = __importStar(__webpack_require__(1));
 /**
  * Manages react webview panels
  */
@@ -63,12 +125,12 @@ class ReactPanel {
             return;
         }
         // Otherwise, create a new panel.
-        const panel = vscode.window.createWebviewPanel(ReactPanel.viewType, 'Hello World Demo', column !== null && column !== void 0 ? column : vscode.ViewColumn.One, {
+        const panel = vscode.window.createWebviewPanel(ReactPanel.viewType, 'funny editor', column !== null && column !== void 0 ? column : vscode.ViewColumn.One, {
             // Enable javascript in the webview
             enableScripts: true,
             // And restrict the webview to only loading content from our extension's `media` directory.
             localResourceRoots: [
-                vscode.Uri.joinPath(extensionUri, 'src'),
+                vscode.Uri.joinPath(extensionUri, 'webview-dist'),
                 vscode.Uri.joinPath(extensionUri, 'extension-dist'),
             ],
             retainContextWhenHidden: true,
@@ -156,10 +218,7 @@ class ReactPanel {
      */
     getHtmlForWebview(webview) {
         // Get the local path to main script run in the webview, then convert it to a uri we can use in the webview.
-        const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this.extensionUri, 'app-dist', 'bundle.js'));
-        const styleResetUri = webview.asWebviewUri(vscode.Uri.joinPath(this.extensionUri, 'src', 'media', 'reset.css'));
-        const styleVSCodeUri = webview.asWebviewUri(vscode.Uri.joinPath(this.extensionUri, 'src', 'media', 'vscode.css'));
-        const styleMainUri = webview.asWebviewUri(vscode.Uri.joinPath(this.extensionUri, 'src', 'media', 'main.css'));
+        const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this.extensionUri, 'webview-dist', 'js', 'bundle.js'));
         // Use a nonce to only allow specific scripts to be run
         const nonce = getNonce();
         return `<!DOCTYPE html>
@@ -172,16 +231,10 @@ class ReactPanel {
       -->
       <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; script-src 'nonce-${nonce}';">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-      <link href="${styleResetUri}" rel="stylesheet">
-      <link href="${styleVSCodeUri}" rel="stylesheet">
-      <link href="${styleMainUri}" rel="stylesheet">
-      
-      <title>Cat Colors</title>
+      <title>React App</title>
     </head>
     <body>
-      <h1>Hello World</h1>
-      <button>Ok</button>
+      <div id="root"></div>
       <script nonce="${nonce}" src="${scriptUri}"></script>
     </body>
     </html>`;
@@ -227,33 +280,13 @@ function getNonce() {
 /******/ 	}
 /******/ 	
 /************************************************************************/
-var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
-(() => {
-var exports = __webpack_exports__;
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.deactivate = exports.activate = void 0;
-const vscode = __webpack_require__(1);
-const ReactPanel_1 = __webpack_require__(2);
-function activate(context) {
-    console.log('Congratulations, your extension "funny-editor" is now active!');
-    context.subscriptions.push(vscode.commands.registerCommand('funny-editor.helloWorld', () => {
-        ReactPanel_1.ReactPanel.createOrShowInstance(context.extensionUri);
-    }));
-    context.subscriptions.push(vscode.commands.registerCommand('funny-editor.doRefactor', () => {
-        if (ReactPanel_1.ReactPanel.currentPanel) {
-            ReactPanel_1.ReactPanel.currentPanel.dispose();
-        }
-    }));
-}
-exports.activate = activate;
-function deactivate() { }
-exports.deactivate = deactivate;
-
-})();
-
-module.exports = __webpack_exports__;
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module is referenced by other modules so it can't be inlined
+/******/ 	var __webpack_exports__ = __webpack_require__(0);
+/******/ 	module.exports = __webpack_exports__;
+/******/ 	
 /******/ })()
 ;
 //# sourceMappingURL=extension.js.map

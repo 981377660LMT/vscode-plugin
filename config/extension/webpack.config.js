@@ -1,17 +1,18 @@
-//@ts-check
+// @ts-check
 
 'use strict'
 
 const path = require('path')
+const { extensionDist, extensionSrc } = require('../getPath.js')
 
 /**@type {import('webpack').Configuration}*/
 const config = {
   target: 'node', // vscode extensions run in a Node.js-context 📖 -> https://webpack.js.org/configuration/node/
   mode: 'none', // this leaves the source code as close as possible to the original (when packaging we set this to 'production')
-  entry: './src/extension.ts', // the entry point of this extension, 📖 -> https://webpack.js.org/configuration/entry-context/
+  entry: path.resolve(extensionSrc, 'extension.ts'), // the entry point of this extension, 📖 -> https://webpack.js.org/configuration/entry-context/
   output: {
     // 注意是插件打包输出，不是web项目的输出
-    path: path.resolve(__dirname, 'extension-dist'),
+    path: extensionDist,
     filename: 'extension.js',
     libraryTarget: 'commonjs2',
   },
@@ -32,6 +33,10 @@ const config = {
         use: [
           {
             loader: 'ts-loader',
+            options: {
+              // disable type checker - we will use it in fork plugin
+              transpileOnly: true,
+            },
           },
         ],
       },

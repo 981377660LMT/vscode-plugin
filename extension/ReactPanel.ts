@@ -29,14 +29,14 @@ class ReactPanel {
     // Otherwise, create a new panel.
     const panel = vscode.window.createWebviewPanel(
       ReactPanel.viewType,
-      'Hello World Demo',
+      'funny editor',
       column ?? vscode.ViewColumn.One,
       {
         // Enable javascript in the webview
         enableScripts: true,
         // And restrict the webview to only loading content from our extension's `media` directory.
         localResourceRoots: [
-          vscode.Uri.joinPath(extensionUri, 'src'),
+          vscode.Uri.joinPath(extensionUri, 'webview-dist'),
           vscode.Uri.joinPath(extensionUri, 'extension-dist'),
         ],
         retainContextWhenHidden: true,
@@ -157,17 +157,7 @@ class ReactPanel {
   private getHtmlForWebview(webview: vscode.Webview) {
     // Get the local path to main script run in the webview, then convert it to a uri we can use in the webview.
     const scriptUri = webview.asWebviewUri(
-      vscode.Uri.joinPath(this.extensionUri, 'app-dist', 'bundle.js')
-    )
-
-    const styleResetUri = webview.asWebviewUri(
-      vscode.Uri.joinPath(this.extensionUri, 'src', 'media', 'reset.css')
-    )
-    const styleVSCodeUri = webview.asWebviewUri(
-      vscode.Uri.joinPath(this.extensionUri, 'src', 'media', 'vscode.css')
-    )
-    const styleMainUri = webview.asWebviewUri(
-      vscode.Uri.joinPath(this.extensionUri, 'src', 'media', 'main.css')
+      vscode.Uri.joinPath(this.extensionUri, 'webview-dist', 'js', 'bundle.js')
     )
 
     // Use a nonce to only allow specific scripts to be run
@@ -183,16 +173,10 @@ class ReactPanel {
       -->
       <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; script-src 'nonce-${nonce}';">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-      <link href="${styleResetUri}" rel="stylesheet">
-      <link href="${styleVSCodeUri}" rel="stylesheet">
-      <link href="${styleMainUri}" rel="stylesheet">
-      
-      <title>Cat Colors</title>
+      <title>React App</title>
     </head>
     <body>
-      <h1>Hello World</h1>
-      <button>Ok</button>
+      <div id="root"></div>
       <script nonce="${nonce}" src="${scriptUri}"></script>
     </body>
     </html>`
