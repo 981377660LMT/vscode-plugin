@@ -4,8 +4,9 @@ node_modules
 .vscode-test/
 *.vsix
 test
-note.md
 
-# 打包
+# myself
+image
+note.md
 webview-dist
 extension-dist

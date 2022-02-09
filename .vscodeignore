@@ -8,10 +8,17 @@ test/**
 .yarnrc
 vsc-extension-quickstart.md
 **/tsconfig.json
-**/.eslintrc.json
-**/.eslintignore
-**/.prettierignore
 **/*.map
 **/*.ts
+
+
+# myself
+eslintrc.json
+eslintignore
+prettierignore
 note.md
+image/**
+config/**
+extension/**
+webview/**
 

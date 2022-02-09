@@ -19,17 +19,17 @@ class ReactPanel {
   static createOrShowInstance(extensionUri: vscode.Uri) {
     const column = vscode.window.activeTextEditor?.viewColumn
 
-    // If we already have a panel, show it.
+    // If we already have a panel, show it .
     if (ReactPanel.currentPanel) {
       ReactPanel.currentPanel.panel.reveal(column)
-      ReactPanel.currentPanel.update()
+      // ReactPanel.currentPanel.update()
       return
     }
 
     // Otherwise, create a new panel.
     const panel = vscode.window.createWebviewPanel(
       ReactPanel.viewType,
-      'funny editor',
+      'Video Editor',
       column ?? vscode.ViewColumn.One,
       {
         // Enable javascript in the webview
@@ -173,7 +173,7 @@ class ReactPanel {
       -->
       <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; script-src 'nonce-${nonce}';">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>React App</title>
+      <title>Video Editor</title>
     </head>
     <body>
       <div id="root"></div>

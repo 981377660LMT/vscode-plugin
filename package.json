@@ -11,21 +11,48 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:video-editor.helloWorld",
-    "onCommand:video-editor.doRefactor"
+    "onCommand:video-editor.show",
+    "onCommand:video-editor.dispose",
+    "onCommand:video-editor.refresh",
+    "onView:video-editor"
   ],
   "main": "./extension-dist/extension.js",
   "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "video-editor-sidebar-view",
+          "title": "Video Editor",
+          "icon": "media/device-camera-video.svg"
+        }
+      ]
+    },
+    "views": {
+      "video-editor-sidebar-view": [
+        {
+          "id": "video-editor",
+          "name": "Video Editor",
+          "icon": "media/device-camera-video.svg",
+          "contextualTitle": "Video Editor",
+          "type": "webview"
+        }
+      ]
+    },
     "commands": [
       {
-        "command": "video-editor.helloWorld",
-        "title": "Hello World",
-        "category": "Funny Editor"
+        "command": "video-editor.show",
+        "title": "Show Video Editor",
+        "category": "Video Editor"
       },
       {
-        "command": "video-editor.doRefactor",
-        "title": "Do some refactoring",
-        "category": "Funny Editor"
+        "command": "video-editor.dispose",
+        "title": "Dispose Video Editor",
+        "category": "Video Editor"
+      },
+      {
+        "command": "video-editor.refresh",
+        "title": "Refresh Video Editor",
+        "category": "Video Editor"
       }
     ]
   },
