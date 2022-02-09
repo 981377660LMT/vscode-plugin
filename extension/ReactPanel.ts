@@ -7,7 +7,7 @@ class ReactPanel {
   /**
    * Track the currently panel. Only allow a single panel to exist at a time.
    */
-  static currentPanel: ReactPanel | undefined
+  static instance: ReactPanel | undefined
   static readonly viewType = 'react'
   private readonly panel: vscode.WebviewPanel
   private readonly extensionUri: vscode.Uri
@@ -20,8 +20,8 @@ class ReactPanel {
     const column = vscode.window.activeTextEditor?.viewColumn
 
     // If we already have a panel, show it .
-    if (ReactPanel.currentPanel) {
-      ReactPanel.currentPanel.panel.reveal(column)
+    if (ReactPanel.instance) {
+      ReactPanel.instance.panel.reveal(column)
       // ReactPanel.currentPanel.update()
       return
     }
@@ -43,24 +43,25 @@ class ReactPanel {
       }
     )
 
-    ReactPanel.currentPanel = new ReactPanel(panel, extensionUri)
+    ReactPanel.instance = new ReactPanel(panel, extensionUri)
   }
 
   static kill() {
-    ReactPanel.currentPanel?.dispose()
-    ReactPanel.currentPanel = undefined
+    ReactPanel.instance?.dispose()
+    ReactPanel.instance = undefined
   }
 
   static revive(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
-    ReactPanel.currentPanel = new ReactPanel(panel, extensionUri)
+    ReactPanel.instance = new ReactPanel(panel, extensionUri)
   }
 
+  // 注意销毁 webview 时应提示是否要关闭
   private constructor(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
     this.panel = panel
     this.extensionUri = extensionUri
 
     // Set the webview's initial html content
-    this.update()
+    this.setup()
 
     // Listen for when the panel is disposed
     // This happens when the user closes the panel or when the panel is closed programatically
@@ -81,7 +82,7 @@ class ReactPanel {
   }
 
   dispose() {
-    ReactPanel.currentPanel = undefined
+    ReactPanel.instance = undefined
 
     // Clean up our resources
     this.panel.dispose()
@@ -94,7 +95,7 @@ class ReactPanel {
     }
   }
 
-  private async update() {
+  private async setup() {
     const webview = this.panel.webview
 
     this.panel.webview.html = this.getHtmlForWebview(webview)
@@ -160,6 +161,10 @@ class ReactPanel {
       vscode.Uri.joinPath(this.extensionUri, 'webview-dist', 'js', 'bundle.js')
     )
 
+    const tailwindUri = webview.asWebviewUri(
+      vscode.Uri.joinPath(this.extensionUri, 'webview-dist', 'css', 'tailwind.css')
+    )
+
     // Use a nonce to only allow specific scripts to be run
     const nonce = getNonce()
 
@@ -171,9 +176,10 @@ class ReactPanel {
         Use a content security policy to only allow loading images from https or from our extension directory,
         and only allow scripts that have a specific nonce.
       -->
-      <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; script-src 'nonce-${nonce}';">
+      <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource} 'unsafe-inline'; script-src 'nonce-${nonce}';">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Video Editor</title>
+      <link href="${tailwindUri}" rel="stylesheet">
     </head>
     <body>
       <div id="root"></div>

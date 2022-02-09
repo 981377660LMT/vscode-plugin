@@ -10,7 +10,7 @@ const { webviewDist, webviewSrc } = require('../getPath.js')
 /**@type {import('webpack').Configuration}*/
 module.exports = merge(commonConfig, {
   mode: 'development',
-  // watch: true,
+  watch: true,
   watchOptions: {
     ignored: ['/node_modules'],
   },

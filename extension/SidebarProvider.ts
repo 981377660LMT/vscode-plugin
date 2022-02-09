@@ -1,26 +1,26 @@
 import * as vscode from 'vscode'
+import { COMMAND } from './constants'
 
 class SidebarProvider implements vscode.WebviewViewProvider {
   resolveWebviewView(
-    webviewView: vscode.WebviewView,
-    context: vscode.WebviewViewResolveContext<unknown>,
-    token: vscode.CancellationToken
+    sidebar: vscode.WebviewView,
+    _context: vscode.WebviewViewResolveContext<unknown>,
+    _token: vscode.CancellationToken
   ): void | Thenable<void> {
-    this.hidden(webviewView)
+    this.hidden(sidebar)
   }
 
-  private hidden(webviewView: vscode.WebviewView): void {
-    const toggleSidebarVisibility = () =>
-      vscode.commands.executeCommand('workbench.action.toggleSidebarVisibility')
-    const showWebview = () => vscode.commands.executeCommand('video-editor.show')
+  private hidden(sidebar: vscode.WebviewView): void {
+    const toggleSidebarVisibility = () => vscode.commands.executeCommand(COMMAND.TOGGLE_SIDEBAR)
+    const showWebview = () => vscode.commands.executeCommand(COMMAND.SHOW_WEBVIEW)
 
-    if (webviewView.visible) {
+    if (sidebar.visible) {
       toggleSidebarVisibility()
       showWebview()
     }
 
-    webviewView.onDidChangeVisibility(() => {
-      if (webviewView.visible) {
+    sidebar.onDidChangeVisibility(() => {
+      if (sidebar.visible) {
         toggleSidebarVisibility()
         showWebview()
       }

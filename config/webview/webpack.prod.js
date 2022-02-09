@@ -19,6 +19,7 @@ module.exports = merge(commonConfig, {
     filename: 'js/bundle.js',
     chunkFilename: 'js/[name].[contentHash:8].js',
   },
+  watch: false,
   module: {
     rules: [
       {

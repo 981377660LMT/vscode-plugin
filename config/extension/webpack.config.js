@@ -10,6 +10,9 @@ const config = {
   target: 'node', // vscode extensions run in a Node.js-context 📖 -> https://webpack.js.org/configuration/node/
   mode: 'none', // this leaves the source code as close as possible to the original (when packaging we set this to 'production')
   entry: path.resolve(extensionSrc, 'extension.ts'), // the entry point of this extension, 📖 -> https://webpack.js.org/configuration/entry-context/
+  watchOptions: {
+    ignored: ['/node_modules'],
+  },
   output: {
     // 注意是插件打包输出，不是web项目的输出
     path: extensionDist,

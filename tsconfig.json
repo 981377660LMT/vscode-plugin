@@ -15,7 +15,8 @@
     "noImplicitAny": true,
     "noImplicitThis": true,
     "noUnusedLocals": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "resolveJsonModule": false
   },
   "exclude": ["node_modules", ".vscode-test", "webview"]
 }

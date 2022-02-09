@@ -1,31 +1,30 @@
 import * as vscode from 'vscode'
+import { COMMAND } from './constants'
 import { ReactPanel } from './ReactPanel'
 import { SidebarProvider } from './SidebarProvider'
 
 export function activate(context: vscode.ExtensionContext) {
-  console.log('Congratulations, your extension "video-editor" is now active!')
-
   context.subscriptions.push(
-    vscode.commands.registerCommand('video-editor.show', () => {
+    vscode.commands.registerCommand(COMMAND.SHOW_WEBVIEW, () => {
       ReactPanel.createOrShowInstance(context.extensionUri)
     })
   )
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('video-editor.dispose', () => {
-      if (ReactPanel.currentPanel) {
-        ReactPanel.currentPanel.dispose()
+    vscode.commands.registerCommand(COMMAND.DISPOSE_WEBVIEW, () => {
+      if (ReactPanel.instance) {
+        ReactPanel.instance.dispose()
       }
     })
   )
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('video-editor.refresh', () => {
+    vscode.commands.registerCommand(COMMAND.REFRESH_WEBVIEW, () => {
       ReactPanel.kill()
       ReactPanel.createOrShowInstance(context.extensionUri)
       // devtools只在panel打开后才可调用，这里需要nextTick一下
       setTimeout(() => {
-        vscode.commands.executeCommand('workbench.action.webview.openDeveloperTools')
+        vscode.commands.executeCommand(COMMAND.OPEN_DEVTOOLS)
       }, 500)
     })
   )
