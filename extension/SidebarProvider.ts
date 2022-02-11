@@ -11,17 +11,17 @@ class SidebarProvider implements vscode.WebviewViewProvider {
   }
 
   private hidden(sidebar: vscode.WebviewView): void {
-    const toggleSidebarVisibility = () => vscode.commands.executeCommand(COMMAND.TOGGLE_SIDEBAR)
+    const closeSidebar = () => vscode.commands.executeCommand(COMMAND.CLOSE_SIDEBAR)
     const showWebview = () => vscode.commands.executeCommand(COMMAND.SHOW_WEBVIEW)
 
     if (sidebar.visible) {
-      toggleSidebarVisibility()
+      closeSidebar()
       showWebview()
     }
 
     sidebar.onDidChangeVisibility(() => {
       if (sidebar.visible) {
-        toggleSidebarVisibility()
+        closeSidebar()
         showWebview()
       }
     })

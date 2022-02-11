@@ -60,25 +60,15 @@ class ReactPanel {
     this.panel = panel
     this.extensionUri = extensionUri
 
-    // Set the webview's initial html content
-    this.setup()
+    // Set panel icon
+    this.panel.iconPath = vscode.Uri.joinPath(this.extensionUri, 'media', 'react-panel.svg')
+
+    // Set the webview's initial html content and events
+    this.setupWebview()
 
     // Listen for when the panel is disposed
     // This happens when the user closes the panel or when the panel is closed programatically
     this.panel.onDidDispose(() => this.dispose(), null, this.disposables)
-
-    // // Handle messages from the webview
-    // this._panel.webview.onDidReceiveMessage(
-    //   (message) => {
-    //     switch (message.command) {
-    //       case "alert":
-    //         vscode.window.showErrorMessage(message.text);
-    //         return;
-    //     }
-    //   },
-    //   null,
-    //   this._disposables
-    // );
   }
 
   dispose() {
@@ -95,10 +85,10 @@ class ReactPanel {
     }
   }
 
-  private async setup() {
+  private async setupWebview() {
     const webview = this.panel.webview
-
-    this.panel.webview.html = this.getHtmlForWebview(webview)
+    webview.html = this.getHtmlForWebview(webview)
+    // 通信
     webview.onDidReceiveMessage(async data => {
       switch (data.type) {
         // case 'report': {
@@ -167,6 +157,7 @@ class ReactPanel {
 
     // Use a nonce to only allow specific scripts to be run
     const nonce = getNonce()
+    // console.log(webview.cspSource) https://*.vscode-webview.net
 
     return `<!DOCTYPE html>
     <html lang="en">
@@ -176,7 +167,9 @@ class ReactPanel {
         Use a content security policy to only allow loading images from https or from our extension directory,
         and only allow scripts that have a specific nonce.
       -->
-      <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource} 'unsafe-inline'; script-src 'nonce-${nonce}';">
+      <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource} 'unsafe-inline'; script-src 'nonce-${nonce}';
+      img-src https: ${webview.cspSource}
+      ">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Video Editor</title>
       <link href="${tailwindUri}" rel="stylesheet">

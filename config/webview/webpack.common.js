@@ -39,11 +39,11 @@ const config = {
     ],
   },
   plugins: [
+    /**
+     * 不删除css文件夹下的文件
+     * @see {@link https://blog.csdn.net/qq_15601471/article/details/100013283}
+     */
     new CleanWebpackPlugin({
-      /**
-       * 不删除css文件夹下的文件
-       * @see {@link https://blog.csdn.net/qq_15601471/article/details/100013283}
-       */
       cleanOnceBeforeBuildPatterns: ['**/*', '!css', '!css/**/*'],
     }),
   ],

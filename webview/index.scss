@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+$body-color: #111827;
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  height: 100%;
+  overflow: hidden;
+  background-color: $body-color;
+}
+
+// y轴overflow 记得加高度
+// @apply {
+//   y-scroll: ;
+// }

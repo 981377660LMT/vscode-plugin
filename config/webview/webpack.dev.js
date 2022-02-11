@@ -44,6 +44,8 @@ module.exports = merge(commonConfig, {
             loader: 'css-loader',
             options: {
               importLoaders: 1,
+              // 开启css module
+              // modules:true
             },
           },
         ],
@@ -51,13 +53,15 @@ module.exports = merge(commonConfig, {
       {
         test: /\.(jpg|jpeg|png|gif)$/,
         include: webviewSrc,
-        use: {
-          loader: 'file-loader',
-          options: {
-            name: '[name].[ext]',
-            output: 'font/',
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              outputPath: '/images/',
+            },
           },
-        },
+        ],
       },
       {
         test: /\.(eot|woff2|woff|ttf|svg)$/,
@@ -66,7 +70,7 @@ module.exports = merge(commonConfig, {
           loader: 'file-loader',
           options: {
             name: '[name].[ext]',
-            output: 'font/',
+            outputPath: '/font/',
           },
         },
       },
