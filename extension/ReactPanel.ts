@@ -1,4 +1,5 @@
 import * as vscode from 'vscode'
+import { Uri } from 'vscode'
 
 /**
  * Manages react webview panels
@@ -15,20 +16,21 @@ class ReactPanel {
   private readonly extensionUri: vscode.Uri
   private disposables: vscode.Disposable[] = []
 
-  private readonly _onDidReceiveMessage = new vscode.EventEmitter<any>()
+  private readonly _onDidReceiveMessage = new vscode.EventEmitter<Webview.Message>()
   readonly onDidReceiveMessage = this._onDidReceiveMessage.event
-  private readonly _onDidChangeViewState = new vscode.EventEmitter<unknown>()
+  private readonly _onDidChangeViewState =
+    new vscode.EventEmitter<vscode.WebviewPanelOnDidChangeViewStateEvent>()
   readonly onDidChangeViewState = this._onDidChangeViewState.event
 
   /**
    * @description 创建webview单例
    */
-  static createOrShowInstance(extensionUri: vscode.Uri): void {
+  static createOrShowInstance(extensionUri: vscode.Uri): ReactPanel {
     const column = vscode.window.activeTextEditor?.viewColumn
 
     if (ReactPanel.instance) {
       ReactPanel.instance.panel.reveal(column)
-      return
+      return ReactPanel.instance
     }
 
     // Otherwise, create a new panel.
@@ -48,19 +50,12 @@ class ReactPanel {
     )
 
     ReactPanel.instance = new ReactPanel(panel, extensionUri)
+    return ReactPanel.instance
   }
 
   static kill(): void {
     ReactPanel.instance?.dispose()
     ReactPanel.instance = undefined
-  }
-
-  /**
-   *
-   * @param action 向webview发送的消息
-   */
-  postMessageToWebview(action: any): void {
-    ReactPanel.instance?.webview.postMessage(action)
   }
 
   private constructor(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
@@ -74,6 +69,18 @@ class ReactPanel {
     this.initLifeCycle()
     this.listenMessageFromWebview()
     this.webview.html = this.getHtmlForWebview()
+  }
+
+  /**
+   *
+   * @param action 向webview发送的消息
+   */
+  postMessageToWebview(action: ReactPanel.Message): void {
+    ReactPanel.instance?.webview.postMessage(action)
+  }
+
+  asWebviewUri(localResource: Uri): Uri {
+    return this.webview.asWebviewUri(localResource)
   }
 
   dispose(): void {
@@ -109,10 +116,8 @@ class ReactPanel {
 
   private listenMessageFromWebview(): void {
     this.webview.onDidReceiveMessage(
-      (message: any) => {
+      (message: Webview.Message) => {
         this._onDidReceiveMessage.fire(message)
-        console.log(message)
-        // 处理逻辑
       },
       null,
       this.disposables
@@ -155,6 +160,9 @@ class ReactPanel {
     </head>
     <body>
       <div id="root"></div>
+      <script nonce="${nonce}">
+        const vscode = acquireVsCodeApi();
+      </script>
       <script nonce="${nonce}" src="${scriptUri}"></script>
     </body>
     </html>`

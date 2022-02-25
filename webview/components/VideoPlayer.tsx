@@ -1,22 +1,48 @@
 import * as React from 'react'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import ReactPanel from '../../typings/ReactPanel'
 
 interface VideoPlayerProps {}
 
 const VideoPlayer: React.FC<VideoPlayerProps> = props => {
-  const { children } = props
-  const [count, setCount] = useState(0)
+  const [videoSrc, setVideoSrc] = useState<string>('')
+  const onDidReceiveMessage = useCallback(
+    (event: MessageEvent<ReactPanel.Message>) => {
+      const { type, payload } = event.data
+      switch (type) {
+        case 'START':
+          setVideoSrc(payload.videoSrc)
+          break
+        default:
+          break
+      }
+    },
+    [videoSrc]
+  )
 
-  console.log(typeof vscode)
   useEffect(() => {
-    document.title = `You clicked ${count} times`
-  })
+    window.addEventListener('message', onDidReceiveMessage)
+    return () => {
+      window.removeEventListener('message', onDidReceiveMessage)
+    }
+  }, [])
+
+  const videoRef = useRef<HTMLVideoElement>(null)
+  videoRef.current?.addEventListener('canplay', e => console.log(e))
+
+  // 这些api需要在context/store里暴露 所有状态集中管理
+  const loadVideo = () => {
+    vscode.postMessage({
+      type: 'START',
+      payload: {},
+    })
+  }
 
   return (
     <>
-      <p>You clicked {count} times</p>
+      <button onClick={loadVideo}>点击发送消息</button>
       {/* vscode-webview://f2daa318-b108-471c-aa23-2d26ba1e6e45/assets/part-100.mp4 */}
-      {/* <video src="../assets/part-100.mp4"></video> */}
+      {videoSrc && <video ref={videoRef} autoPlay loop controls src={videoSrc}></video>}
     </>
   )
 }

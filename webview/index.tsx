@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import { App } from './App'
 import './index.scss'
 
-ReactDOM.render(<App />, document.getElementById('root'))
+// @ts-ignore
+// console.log(vscode)
 
-const vscode = acquireVsCodeApi()
+ReactDOM.render(<App />, document.getElementById('root'))

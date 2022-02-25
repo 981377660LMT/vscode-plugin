@@ -1,7 +1,12 @@
+import Webview from '../../typings/Webview'
+
 interface VSCode {
-  postMessage(message: any): void
+  postMessage(message: Webview.Message): void
+  getState(): any
+  setState(state: any): void
 }
 
-declare function acquireVsCodeApi(): VSCode
-
-declare const vscode: VSCode
+declare global {
+  // export function acquireVsCodeApi(): VSCode
+  export const vscode: VSCode
+}

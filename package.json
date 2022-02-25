@@ -10,6 +10,12 @@
   "categories": [
     "Other"
   ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true,
+      "description": ""
+    }
+  },
   "activationEvents": [
     "onCommand:video-editor.show",
     "onCommand:video-editor.dispose",
