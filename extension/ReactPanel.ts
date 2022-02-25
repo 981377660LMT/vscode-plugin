@@ -9,20 +9,25 @@ class ReactPanel {
    */
   static instance: ReactPanel | undefined
   static readonly viewType = 'react'
+
   private readonly panel: vscode.WebviewPanel
+  private readonly webview: vscode.Webview
   private readonly extensionUri: vscode.Uri
   private disposables: vscode.Disposable[] = []
+
+  private readonly _onDidReceiveMessage = new vscode.EventEmitter<any>()
+  readonly onDidReceiveMessage = this._onDidReceiveMessage.event
+  private readonly _onDidChangeViewState = new vscode.EventEmitter<unknown>()
+  readonly onDidChangeViewState = this._onDidChangeViewState.event
 
   /**
    * @description 创建webview单例
    */
-  static createOrShowInstance(extensionUri: vscode.Uri) {
+  static createOrShowInstance(extensionUri: vscode.Uri): void {
     const column = vscode.window.activeTextEditor?.viewColumn
 
-    // If we already have a panel, show it .
     if (ReactPanel.instance) {
       ReactPanel.instance.panel.reveal(column)
-      // ReactPanel.currentPanel.update()
       return
     }
 
@@ -32,7 +37,6 @@ class ReactPanel {
       'Video Editor',
       column ?? vscode.ViewColumn.One,
       {
-        // Enable javascript in the webview
         enableScripts: true,
         // And restrict the webview to only loading content from our extension's `media` directory.
         localResourceRoots: [
@@ -46,32 +50,33 @@ class ReactPanel {
     ReactPanel.instance = new ReactPanel(panel, extensionUri)
   }
 
-  static kill() {
+  static kill(): void {
     ReactPanel.instance?.dispose()
     ReactPanel.instance = undefined
   }
 
-  static revive(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
-    ReactPanel.instance = new ReactPanel(panel, extensionUri)
+  /**
+   *
+   * @param action 向webview发送的消息
+   */
+  postMessageToWebview(action: any): void {
+    ReactPanel.instance?.webview.postMessage(action)
   }
 
-  // 注意销毁 webview 时应提示是否要关闭
   private constructor(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
     this.panel = panel
+    this.webview = this.panel.webview
     this.extensionUri = extensionUri
 
     // Set panel icon
     this.panel.iconPath = vscode.Uri.joinPath(this.extensionUri, 'media', 'react-panel.svg')
 
-    // Set the webview's initial html content and events
-    this.setupWebview()
-
-    // Listen for when the panel is disposed
-    // This happens when the user closes the panel or when the panel is closed programatically
-    this.panel.onDidDispose(() => this.dispose(), null, this.disposables)
+    this.initLifeCycle()
+    this.listenMessageFromWebview()
+    this.webview.html = this.getHtmlForWebview()
   }
 
-  dispose() {
+  dispose(): void {
     ReactPanel.instance = undefined
 
     // Clean up our resources
@@ -85,73 +90,47 @@ class ReactPanel {
     }
   }
 
-  private async setupWebview() {
-    const webview = this.panel.webview
-    webview.html = this.getHtmlForWebview(webview)
-    // 通信
-    webview.onDidReceiveMessage(async data => {
-      switch (data.type) {
-        // case 'report': {
-        //   const message = await vscode.window.showInputBox({
-        //     placeHolder: 'why are you reporting this user?',
-        //   })
-        //   if (message) {
-        //     await mutationNoErr(`/report`, { message, ...data.value })
-        //     webview.postMessage({
-        //       command: 'report-done',
-        //       data,
-        //     })
-        //     vscode.window.showInformationMessage('Thank you for reporting!')
-        //   }
-        //   break
-        // }
-        // case 'set-window-info': {
-        //   const { displayName, flair } = data.value
-        //   this._panel.title = displayName
-        //   if (flair in flairMap) {
-        //     const both = vscode.Uri.parse(
-        //       `https://flair.benawad.com/` + flairMap[flair as keyof typeof flairMap]
-        //     )
-        //     this._panel.iconPath = {
-        //       light: both,
-        //       dark: both,
-        //     }
-        //   }
-        //   break
-        // }
-        case 'onInfo': {
-          if (!data.value) {
-            return
-          }
-          vscode.window.showInformationMessage(data.value)
-          break
-        }
-        case 'onError': {
-          if (!data.value) {
-            return
-          }
-          vscode.window.showErrorMessage(data.value)
-          break
-        }
-        // case 'tokens': {
-        //   await Util.globalState.update(accessTokenKey, data.accessToken)
-        //   await Util.globalState.update(refreshTokenKey, data.refreshToken)
-        //   break
-        // }
-      }
-    })
+  // 注意销毁 webview 时应提示是否要关闭
+  private initLifeCycle(): void {
+    this.panel.onDidChangeViewState(
+      e => {
+        this._onDidChangeViewState.fire(e)
+      },
+      null,
+      this.disposables
+    )
+
+    this.disposables.push(this._onDidChangeViewState)
+
+    // Listen for when the panel is disposed
+    // This happens when the user closes the panel or when the panel is closed programatically
+    this.panel.onDidDispose(() => this.dispose(), null, this.disposables)
+  }
+
+  private listenMessageFromWebview(): void {
+    this.webview.onDidReceiveMessage(
+      (message: any) => {
+        this._onDidReceiveMessage.fire(message)
+        console.log(message)
+        // 处理逻辑
+      },
+      null,
+      this.disposables
+    )
+
+    this.disposables.push(this._onDidReceiveMessage)
   }
 
   /**
    * @description webview配置
    */
-  private getHtmlForWebview(webview: vscode.Webview) {
+  private getHtmlForWebview(): string {
     // Get the local path to main script run in the webview, then convert it to a uri we can use in the webview.
-    const scriptUri = webview.asWebviewUri(
+    const scriptUri = this.webview.asWebviewUri(
       vscode.Uri.joinPath(this.extensionUri, 'webview-dist', 'js', 'bundle.js')
     )
 
-    const tailwindUri = webview.asWebviewUri(
+    const tailwindUri = this.webview.asWebviewUri(
       vscode.Uri.joinPath(this.extensionUri, 'webview-dist', 'css', 'tailwind.css')
     )
 
@@ -167,8 +146,8 @@ class ReactPanel {
         Use a content security policy to only allow loading images from https or from our extension directory,
         and only allow scripts that have a specific nonce.
       -->
-      <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource} 'unsafe-inline'; script-src 'nonce-${nonce}';
-      img-src https: ${webview.cspSource}
+      <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${this.webview.cspSource} 'unsafe-inline'; script-src 'nonce-${nonce}';
+      img-src https: ${this.webview.cspSource}
       ">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Video Editor</title>

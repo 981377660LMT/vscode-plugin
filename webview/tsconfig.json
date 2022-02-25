@@ -9,9 +9,12 @@
     "experimentalDecorators": true,
     "lib": ["dom", "ES2015"],
     "strict": true,
+    "noImplicitAny": true,
     "noUnusedLocals": true,
     "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    // typeRoots的默认值为node_modules/@types
+    "typeRoots": ["node_modules/@types"]
   },
   "exclude": ["node_modules"]
 }

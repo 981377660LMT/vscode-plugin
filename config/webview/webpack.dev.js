@@ -63,6 +63,19 @@ module.exports = merge(commonConfig, {
           },
         ],
       },
+      // 处理多媒体文件
+      {
+        test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              outputPath: '/video/',
+            },
+          },
+        ],
+      },
       {
         test: /\.(eot|woff2|woff|ttf|svg)$/,
         include: webviewSrc,

@@ -22,7 +22,6 @@ function useResizableSidebar(
   const startResizing = useCallback(() => setIsResizing(true), [])
   const stopResizing = useCallback(() => setIsResizing(false), [])
 
-  // 需要节流
   const resize = useCallback(
     throttle((e: MouseEvent) => {
       if (isResizing) {
