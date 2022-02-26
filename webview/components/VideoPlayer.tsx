@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { useCallback, useEffect, useRef, useState } from 'react'
+
 import ReactPanel from '../../typings/ReactPanel'
 
 interface VideoPlayerProps {}
@@ -27,12 +28,12 @@ const VideoPlayer: React.FC<VideoPlayerProps> = props => {
   }, [])
 
   // 这些api需要在context/store里暴露 所有状态集中管理
-  const loadVideo = () => {
+  const loadVideo = useCallback(() => {
     vscode.postMessage({
       type: 'START',
       payload: {},
     })
-  }
+  }, [])
 
   return (
     <>

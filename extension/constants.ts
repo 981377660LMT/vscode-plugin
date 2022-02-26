@@ -12,4 +12,8 @@ const COMMAND = {
   TOGGLE_SIDEBAR: 'workbench.action.toggleSidebarVisibility',
 }
 
-export { COMMAND }
+const ID = {
+  // id
+  VIDEO_EDITOR: 'video-editor',
+}
+export { COMMAND, ID }

@@ -9,6 +9,9 @@ function disposeAll(disposables: vscode.Disposable[]): void {
   }
 }
 
+/**
+ * 官方demo
+ */
 abstract class Disposable {
   private _isDisposed = false
   protected _disposables: vscode.Disposable[] = []

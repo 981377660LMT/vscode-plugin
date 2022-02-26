@@ -1,6 +1,9 @@
 import * as vscode from 'vscode'
 import { Uri } from 'vscode'
 
+import { ID } from './constants'
+import { getDiskNames } from './utils/getDiskNames'
+
 /**
  * Manages react webview panels
  */
@@ -9,7 +12,7 @@ class ReactPanel {
    * Track the currently panel. Only allow a single panel to exist at a time.
    */
   static instance: ReactPanel | undefined
-  static readonly viewType = 'react-video-editor'
+  static readonly viewType = ID.VIDEO_EDITOR
 
   private readonly panel: vscode.WebviewPanel
   private readonly webview: vscode.Webview
@@ -23,7 +26,7 @@ class ReactPanel {
   readonly onDidChangeViewState = this._onDidChangeViewState.event
 
   /**
-   * @description 创建webview单例
+   * @description create webview singleton
    */
   static createOrShowInstance(extensionUri: vscode.Uri): ReactPanel {
     const column = vscode.window.activeTextEditor?.viewColumn
@@ -34,6 +37,9 @@ class ReactPanel {
     }
 
     // Otherwise, create a new panel.
+    const diskNames = getDiskNames()
+    const rootUris = diskNames.map(dir => vscode.Uri.file(dir))
+
     const panel = vscode.window.createWebviewPanel(
       ReactPanel.viewType,
       'Video Editor',
@@ -41,10 +47,8 @@ class ReactPanel {
       {
         enableScripts: true,
         // And restrict the webview to only loading content from our extension's `media` directory.
-        localResourceRoots: [
-          vscode.Uri.joinPath(extensionUri, 'webview-dist'),
-          vscode.Uri.joinPath(extensionUri, 'extension-dist'),
-        ],
+        // 系统所有文件都可以访问
+        localResourceRoots: [...rootUris, extensionUri],
         retainContextWhenHidden: true,
       }
     )
