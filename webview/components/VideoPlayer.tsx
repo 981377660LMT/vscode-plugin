@@ -6,19 +6,18 @@ interface VideoPlayerProps {}
 
 const VideoPlayer: React.FC<VideoPlayerProps> = props => {
   const [videoSrc, setVideoSrc] = useState<string>('')
-  const onDidReceiveMessage = useCallback(
-    (event: MessageEvent<ReactPanel.Message>) => {
-      const { type, payload } = event.data
-      switch (type) {
-        case 'START':
-          setVideoSrc(payload.videoSrc)
-          break
-        default:
-          break
-      }
-    },
-    [videoSrc]
-  )
+  const videoRef = useRef<HTMLVideoElement>(null)
+
+  const onDidReceiveMessage = useCallback((event: MessageEvent<ReactPanel.Message>) => {
+    const { type, payload } = event.data
+    switch (type) {
+      case 'START':
+        setVideoSrc(payload.videoSrc)
+        break
+      default:
+        break
+    }
+  }, [])
 
   useEffect(() => {
     window.addEventListener('message', onDidReceiveMessage)
@@ -26,9 +25,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = props => {
       window.removeEventListener('message', onDidReceiveMessage)
     }
   }, [])
-
-  const videoRef = useRef<HTMLVideoElement>(null)
-  videoRef.current?.addEventListener('canplay', e => console.log(e))
 
   // 这些api需要在context/store里暴露 所有状态集中管理
   const loadVideo = () => {

@@ -31,13 +31,19 @@ export function activate(context: vscode.ExtensionContext) {
               .with({ query: `version=${Date.now().toString()}` })
               .toString()
 
-            console.log(videoSrc)
             webview.postMessageToWebview({
               type: 'START',
               payload: {
                 videoSrc,
               },
             })
+
+            // vscode.commands.executeCommand(
+            //   'vscode.openWith',
+            //   select[0],
+            //   'default',
+            //   vscode.ViewColumn
+            // )
             break
 
           default:

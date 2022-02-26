@@ -9,7 +9,7 @@ class ReactPanel {
    * Track the currently panel. Only allow a single panel to exist at a time.
    */
   static instance: ReactPanel | undefined
-  static readonly viewType = 'react'
+  static readonly viewType = 'react-video-editor'
 
   private readonly panel: vscode.WebviewPanel
   private readonly webview: vscode.Webview
@@ -152,8 +152,7 @@ class ReactPanel {
         and only allow scripts that have a specific nonce.
       -->
       <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${this.webview.cspSource} 'unsafe-inline'; script-src 'nonce-${nonce}';
-      img-src https: ${this.webview.cspSource}
-      ">
+      img-src https: ${this.webview.cspSource}; media-src blob: ${this.webview.cspSource};">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Video Editor</title>
       <link href="${tailwindUri}" rel="stylesheet">

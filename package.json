@@ -12,8 +12,7 @@
   ],
   "capabilities": {
     "untrustedWorkspaces": {
-      "supported": true,
-      "description": ""
+      "supported": true
     }
   },
   "activationEvents": [
